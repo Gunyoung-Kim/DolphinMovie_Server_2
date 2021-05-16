@@ -12,12 +12,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="dolphin_movie_user")
+@Table(name="User")
 @NamedQueries ({
-	@NamedQuery(name=User.FIND_BY_ADDRESS, query="select u from dolphin_movie_user u where u.address= :address"),
-	@NamedQuery(name=User.FIND_ID_BY_ADDRESS,query="select u.id from dolphin_movie_user u where u.address = :address"),
-	@NamedQuery(name=User.FIND_BY_ID,query="select u from dolphin_movie_user u where u.id = :id"),
-	@NamedQuery(name=User.FIND_ALL, query="select u from dolphin_movie_user")
+	@NamedQuery(name=User.FIND_BY_ADDRESS, query="select u from User u where u.address= :address"),
+	@NamedQuery(name=User.FIND_ID_BY_ADDRESS,query="select u.id from User u where u.address = :address"),
+	@NamedQuery(name=User.FIND_BY_ID,query="select u from User u where u.id = :id"),
+	@NamedQuery(name=User.FIND_ALL, query="select u from User u")
 })
 public class User {
 	

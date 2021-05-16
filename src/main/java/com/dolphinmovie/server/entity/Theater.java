@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="dolphin_movie_theater")
-@NamedQuery(name=Theater.FIND_ALL, query="select t from dolphin_movie_theater")
+@Table(name="Theater")
+@NamedQuery(name=Theater.FIND_ALL, query="select t from Theater t")
 public class Theater {
 	
 	public static final String FIND_ALL = "Theater.findAll";
@@ -43,7 +43,33 @@ public class Theater {
 	
 	@Column
 	private URL link;
+	
+	/*
+	 * Constructor of this Class
+	 */
+	
+	public Theater(@NotNull String name, @NotNull String address) {
+		
+	}
+	
+	public Theater(@NotNull String name, @NotNull String address, URL link) {
+		this(name,address);
+		this.link = link;
+	}
+	
+	public Theater(@NotNull String name, @NotNull String address, Double xpos, Double ypos, boolean open, URL link) {
+		this(name,address,link);
+		this.xpos = xpos;
+		this.ypos = ypos;
+		this.open = open;
+		
+	}
 
+
+	/*
+	 *  Getters and Setters for fields of this Class 
+	 */
+	
 	public Long getId() {
 		return id;
 	}
@@ -99,6 +125,25 @@ public class Theater {
 	public void setLink(URL link) {
 		this.link = link;
 	}
-
+	
+	/*
+	 * Theater which is not opened contains parentheses in its name
+	 * 
+	 * Opened -> return -1 ,  Not Opened yet -> return index of '(' to format its name
+	 */
+	private static int isOpened(String name) {
+		char[] c = name.toCharArray();
+		if(c[c.length-1] != ')') {
+			return -1;
+		} 
+		
+		for(int i=0;i<c.length;i++) {
+			if(c[i] == '(') {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	
 }

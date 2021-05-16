@@ -15,7 +15,35 @@ public class Movie {
 	private URL thumbnailLink;
 	
 	private URL link;
-
+	
+	/*
+	 * Constructor of this Class
+	 */
+	public Movie(String name) {
+		this.name = name;
+	}
+	
+	public Movie(String name,int rankInten, boolean rankOldAndNew) {
+		this(name);
+		this.rankInten = rankInten;
+		this.rankOldAndNew = rankOldAndNew;
+	}
+	
+	public Movie(String name, URL thumbnailLink, URL link) {
+		this(name);
+		this.thumbnailLink = thumbnailLink;
+		this.link = link;
+	}
+	
+	public Movie(String name, int rankInten, boolean rankOldAndNew, URL thumbnailLink, URL link) {
+		this(name,rankInten,rankOldAndNew);
+		this.thumbnailLink = thumbnailLink;
+		this.link = link;
+	}
+	
+	/*
+	 *  Getters and Setters for fields of this Class 
+	 */
 	
 	public String getName() {
 		return name;
@@ -66,15 +94,4 @@ public class Movie {
 		this.link = link;
 	}
 
-
-	public Movie(String name, int rankInten, boolean rankOldAndNew, URL thumbnailLink, URL link) {
-		super();
-		this.name = name;
-		this.rankInten = rankInten;
-		this.rankOldAndNew = rankOldAndNew;
-		this.thumbnailLink = thumbnailLink;
-		this.link = link;
-	}
-	
-	
 }
