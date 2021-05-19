@@ -67,8 +67,6 @@ public class KobisService {
 		
 		String responseString = response.getBody().toString();
 		
-		System.out.println(responseString);
-		
 		try {
 			JSONParser parser = new JSONParser();
 			JSONObject parseResult = (JSONObject) parser.parse(responseString);

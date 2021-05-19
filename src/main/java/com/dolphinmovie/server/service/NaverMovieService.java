@@ -48,7 +48,6 @@ public class NaverMovieService {
 	private void makeMoviesList() {
 		dailyMoviesName = kobis.getDailyListMovieName();
 		weeklyMoviesName = kobis.getWeeklyListMovieName();
-		System.out.println(dailyMoviesName.length);
 		int i=0;
 		
 		int[] dailyRankIntens = kobis.getDailyListMovieRankInten();

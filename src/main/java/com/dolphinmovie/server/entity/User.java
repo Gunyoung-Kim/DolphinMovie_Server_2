@@ -14,51 +14,42 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="User")
 @NamedQueries ({
-	@NamedQuery(name=User.FIND_BY_ADDRESS, query="select u from User u where u.address= :address"),
-	@NamedQuery(name=User.FIND_ID_BY_ADDRESS,query="select u.id from User u where u.address = :address"),
 	@NamedQuery(name=User.FIND_BY_ID,query="select u from User u where u.id = :id"),
 	@NamedQuery(name=User.FIND_ALL, query="select u from User u")
 })
 public class User {
 	
 	// names for namedQueries
-	public static final String FIND_BY_ADDRESS = "User.findByAddress";
-	public static final String FIND_ID_BY_ADDRESS = "User.findIdByAddress";
 	public static final String FIND_BY_ID = "User.findById";
 	public static final String FIND_ALL = "User.findAll";
 	
 	@Id
 	@Column
 	@NotNull
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private String id;
 	
 	@Column
 	@NotNull
-	private String address;
+	private String password;
 	
 	@Column(length=40)
 	@NotNull
 	private String name;
-	
-	@Column
-	@Min(0)
-	private Integer age;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getName() {
@@ -67,15 +58,6 @@ public class User {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Integer getAge() {
-		return age;
-	}
-
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-	
+	}	
 	
 }

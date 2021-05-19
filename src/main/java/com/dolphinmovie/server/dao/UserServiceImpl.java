@@ -25,19 +25,19 @@ public class UserServiceImpl implements UserService {
 	public List<User> findAll() {
 		return em.createQuery(User.FIND_ALL,User.class).getResultList();
 	}
-	
-	@Override
-	@Transactional(readOnly=true)
-	public User findByAddress(String address) {
-		return em.createNamedQuery(User.FIND_BY_ADDRESS, User.class).setParameter("address", address).getSingleResult();
-	}
 
 	@Override
-	public void saveUser(User user) {
-		if(user.getId() == null) {
-			em.persist(user);
-		} else {
-			em.merge(user);
+	public User saveUser(User user) {
+		try {
+			if(user.getId() == null) {
+				em.persist(user);
+				return user;
+			} else {
+				em.merge(user);
+				return user;
+			}
+		} catch(Exception ex) {
+			return null;
 		}
 	}
 
@@ -49,18 +49,26 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly=true)
-	public Long findIdByAddress(String address) {
-		return em.createNamedQuery(User.FIND_ID_BY_ADDRESS,Long.class).setParameter("address", address).getSingleResult();
-	}
-
-	@Override
-	@Transactional(readOnly=true)
-	public User findById(Long id) throws Exception{
+	public User findById(String id){
 		try {
 			User result = em.createNamedQuery(User.FIND_BY_ID,User.class).setParameter("id", id).getSingleResult();
 			return result;
 		} catch(NoResultException ex) {
-			throw ex;
+			return null;
+		}
+	}
+
+	/*
+	 *  guaranteed that input id exist in database before this method is called
+	 */
+	@Override
+	public User checkPassword(String id, String password) {
+		User user = findById(id);
+		
+		if(password.equals(user.getPassword())) {
+			return user;
+		} else {
+			return null;
 		}
 	}
 
