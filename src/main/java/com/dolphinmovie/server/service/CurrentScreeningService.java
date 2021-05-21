@@ -13,20 +13,17 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.dolphinmovie.server.entity.Movie;
 
-
+@Service("currentScreeningService")
 public class CurrentScreeningService {
+	private Environment env;
 	private WebDriver driver;
 	
 	private List<Movie> screeningMovies;
-	
-	private static String BASE_URL;
 	
 	private static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
 	private static final String WEB_DRIVER_PATH = "src/main/resources/chromedriver";
@@ -34,6 +31,11 @@ public class CurrentScreeningService {
 	/*
 	 *  update Once in a day 
 	 */
+	
+	private CurrentScreeningService(Environment env) {
+		this.env = env;
+		updateList();
+	}
 	
 	private boolean updateList() {
 		this.screeningMovies = new ArrayList<>();
@@ -46,7 +48,7 @@ public class CurrentScreeningService {
 		
 		
 		// get from properties file
-		String base_url = "";
+		String base_url = env.getProperty("screeningmovie.base_url");
 		
 		try {
 			driver.get(base_url);
@@ -60,12 +62,13 @@ public class CurrentScreeningService {
 			for(int i=0;i<titles.size();i++) {
 				String title = titles.get(i).text();
 				String thumbnailURL = imageBoxes.get(i).child(0).attr("src");
-				String infoLink = link.get(i).attr("href");
+				String infoLink = "https://search.naver.com/search.naver" + link.get(i).attr("href");
 				
+	
 				this.screeningMovies.add(new Movie(title,new URL(thumbnailURL),new URL(infoLink)));
 			}
 			
-			driver.findElement(By.xpath("/html/body/div[3]/div[2]/div/div[1]/div[2]/div[2]/div/div/div/div/div[4]/div/a[2]")).click();
+			driver.findElement(By.xpath("/html/body/div[3]/div[2]/div/div[1]/div[3]/div[2]/div/div/div/div/div[4]/div/a[2]")).click();
 			Thread.sleep(100);
 			
 			doc = Jsoup.parse(driver.getPageSource());
@@ -77,7 +80,7 @@ public class CurrentScreeningService {
 			for(int i=0;i<titles.size();i++) {
 				String title = titles.get(i).text();
 				String thumbnailURL = imageBoxes.get(i).child(0).attr("src");
-				String infoLink = link.get(i).attr("href");
+				String infoLink = "https://search.naver.com/search.naver" + link.get(i).attr("href");
 				
 				this.screeningMovies.add(new Movie(title,new URL(thumbnailURL),new URL(infoLink)));
 			}

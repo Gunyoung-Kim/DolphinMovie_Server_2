@@ -13,32 +13,37 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.dolphinmovie.server.entity.Theater;
 
+@Service("theaterUpdateService")
 public class TheaterUpdateService {
 	private WebDriver driver;
 	
-	private static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-	private static final String WEB_DRIVER_PATH = "src/main/resources/chromedriver";
+	private Environment env;
 	
 	private List<Theater> theaterList;
 	
-	private TheaterUpdateService() {
-		
+	private String[] optionArguments = {
+			"headleas" // crawling without browser ui
+	};
+	
+	private TheaterUpdateService(Environment env) {
+		this.env = env;
+		//updateTheaterList();
 	}
 	
 	private void updateTheaterList() {
 		this.theaterList = new ArrayList<>();
-		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
-		String[] optionArguments = {"headless"};
+		System.setProperty(env.getProperty("webdriver.id"), env.getProperty("webdriver.path"));
 		
 		ChromeOptions option = new ChromeOptions();
 		option.addArguments(optionArguments);
 		driver = new ChromeDriver(option);
 		
-		String base_url = "";
+		String base_url = env.getProperty("theaterupdate.base_url");
 		
 		try {
 			driver.get(base_url);
@@ -82,6 +87,8 @@ public class TheaterUpdateService {
 				if(i <6) 
 					actions.moveToElement(next_page).click().build().perform();
 			}
+			
+			System.out.println(theaterList.size());
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {

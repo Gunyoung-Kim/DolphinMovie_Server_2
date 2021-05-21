@@ -2,6 +2,8 @@ package com.dolphinmovie.server.entity;
 
 import java.net.URL;
 
+import org.json.simple.JSONObject;
+
 public class Movie {
 	
 	private String name;
@@ -19,6 +21,7 @@ public class Movie {
 	/*
 	 * Constructor of this Class
 	 */
+	
 	public Movie(String name) {
 		this.name = name;
 	}
@@ -92,6 +95,23 @@ public class Movie {
 
 	public void setLink(URL link) {
 		this.link = link;
+	}
+	
+	/*
+	 *  return json style String of this class
+	 */
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJSONObject() {
+		JSONObject object = new JSONObject();
+		
+		object.put("title", this.name);
+		object.put("rankInten", this.rankInten);
+		object.put("rankOldAndNew", this.rankOldAndNew);
+		object.put("thumbnailLink", thumbnailLink.toString());
+		object.put("link", this.link.toString());
+		
+		return object;
 	}
 
 }
