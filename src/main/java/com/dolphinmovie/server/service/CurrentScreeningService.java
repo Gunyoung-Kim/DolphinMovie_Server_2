@@ -25,9 +25,9 @@ public class CurrentScreeningService {
 	
 	private List<Movie> screeningMovies;
 	
-	private static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-	private static final String WEB_DRIVER_PATH = "src/main/resources/chromedriver";
-	
+	private String[] optionArguments = {
+			"headless" // crawling without browser ui
+	};
 	/*
 	 *  update Once in a day 
 	 */
@@ -39,8 +39,7 @@ public class CurrentScreeningService {
 	
 	private boolean updateList() {
 		this.screeningMovies = new ArrayList<>();
-		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
-		String[] optionArguments = {"headless"};
+		System.setProperty(env.getProperty("webdriver.id"), env.getProperty("webdriver.path"));
 		
 		ChromeOptions option = new ChromeOptions();
 		option.addArguments(optionArguments);
@@ -97,10 +96,5 @@ public class CurrentScreeningService {
 	
 	public List<Movie> getScreeingMovies() {
 		return this.screeningMovies;
-	}
-	
-	@PostConstruct
-	public void init() {
-		//updateList();
 	}
 }

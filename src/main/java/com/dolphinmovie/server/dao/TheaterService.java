@@ -8,4 +8,5 @@ public interface TheaterService {
 	public List<Theater> getAll();
 	public void saveTheaters(List<Theater> list);
 	public void saveTheater(Theater theater);
+	public int getCount();
 }

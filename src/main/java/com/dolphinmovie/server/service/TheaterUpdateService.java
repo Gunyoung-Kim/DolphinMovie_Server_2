@@ -18,25 +18,27 @@ import org.springframework.stereotype.Service;
 
 import com.dolphinmovie.server.entity.Theater;
 
+
 @Service("theaterUpdateService")
 public class TheaterUpdateService {
-	private WebDriver driver;
-	
 	private Environment env;
 	
-	private List<Theater> theaterList;
+	private WebDriver driver;
 	
 	private String[] optionArguments = {
-			"headleas" // crawling without browser ui
+			"headless" // crawling without browser ui
 	};
 	
 	private TheaterUpdateService(Environment env) {
 		this.env = env;
-		//updateTheaterList();
+		updateTheaterList();
 	}
 	
-	private void updateTheaterList() {
-		this.theaterList = new ArrayList<>();
+	/*
+	 *  return null if there is exception
+	 */
+	public List<Theater> updateTheaterList() {
+		List<Theater> theaterList = new ArrayList<>();
 		System.setProperty(env.getProperty("webdriver.id"), env.getProperty("webdriver.path"));
 		
 		ChromeOptions option = new ChromeOptions();
@@ -89,15 +91,15 @@ public class TheaterUpdateService {
 			}
 			
 			System.out.println(theaterList.size());
+			return theaterList;
 		} catch(Exception e) {
 			e.printStackTrace();
+			return null;
 		} finally {
 			if(driver != null)
 				driver.close();
 		}
 	}
 	
-	public List<Theater> getTheaterList() {
-		return this.theaterList;
-	}
+
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dolphinmovie.server.entity.Theater;
+import com.dolphinmovie.server.service.TheaterUpdateService;
 
 @Service("theaterService")
 @Transactional
@@ -20,13 +21,26 @@ public class TheaterServiceImpl implements TheaterService {
 	@PersistenceContext
 	EntityManager em;
 	
+	TheaterUpdateService theaterUpdateService;
+	
 	private List<Theater> theaterList;
+	
+	private TheaterServiceImpl(TheaterUpdateService theaterUpdateService) {
+		this.theaterUpdateService = theaterUpdateService;
+	}
 
 	@Override
 	@Transactional(readOnly=true)
 	public List<Theater> getAll() {
 		return em.createNamedQuery(Theater.FIND_ALL,Theater.class).getResultList();
 	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public int getCount() {
+		return em.createNamedQuery(Theater.COUNT).getFirstResult();
+	}
+	
 
 	@Override
 	public void saveTheaters(List<Theater> list) {
@@ -48,16 +62,18 @@ public class TheaterServiceImpl implements TheaterService {
 	public List<Theater> getTheaterList() {
 		if(theaterList == null) {
 			theaterList = getAll();
-		} else if(theaterList.size() ==0) {
-			theaterList = getAll();
-		} 
+		}
 		
 		return this.theaterList;
 	}
 	
 	@PostConstruct 
 	public void init() {
-		
+		if(getCount() == 0) {
+			theaterList = this.theaterUpdateService.updateTheaterList();
+			if(theaterList != null)
+				saveTheaters(theaterList);
+		}
 	}
 
 }
